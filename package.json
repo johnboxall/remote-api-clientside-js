@@ -1,0 +1,10 @@
+{
+    "name": "using-remote-api",
+    "version": "0.0.1",
+    "description": "Example of exposing a remote API on a local server.",
+    "author": "John Boxal <john@mobify.com>",
+    "dependencies": {
+        "node-static": "0.5.9"
+    },
+    "engine": "node >= 0.6.2"
+}

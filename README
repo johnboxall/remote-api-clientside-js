@@ -1,0 +1,11 @@
+Getting around XMLHttpRequest's Same Origin Policy can be a pain. This example repo shows three techniques for dealing with it: JSONP, CORS and Proxying using node.
+
+To run, you'll need to install node.
+
+$ git clone git@github.com:johnboxall/remote-api-js.git
+$ cd remote-api-js
+$ npm install
+$ node index.js
+
+Browse to http://127.0.0.1:8000/_/index.html.
+

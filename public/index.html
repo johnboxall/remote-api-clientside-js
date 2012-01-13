@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+	<title>Accessing Remote APIs using JavaScript</title>
+	<link rel="stylesheet" href="/_/style.css">
+	<link rel="stylesheet" href="/_/prettify.css">
+    <link type="image/x-icon" rel="icon" href="/_/favicon.ico">
+    <link type="image/x-icon" rel="shortcut icon" href="/_/favicon.ico">
+    <style>
+    	.btn { position: absolute; right: 0; }
+    </style>
+
+</head>
+<body>
+	<h1>Accessing Remote APIs using JavaScript</title>
+	<h2>Cross Domain Policy</h2>
+
+	<p><a href="http://www.w3.org/TR/XMLHttpRequest/">W3C XMLHttpRequest spec on `origin`</a>:</p>
+
+	<blockquote><p>If the origin of url is not same origin with the XMLHttpRequest origin raise a SECURITY_ERR exception ...</p></blockquote>
+
+	<p><a href="http://dev.w3.org/html5/spec/origin-0.html">HTML5, a vocabulary and associated APIs for HTML and XHTML</a>:</p>
+
+	<blockquote>
+	<p>Two origins are said to be the
+  same origin if the following algorithm returns true:</a></p>
+
+	<ol><li><p>Let A be the first origin
+	   being compared, and B be the second
+	   origin being compared.</p></li>
+
+	   <li><p>If A and B are both
+	   opaque identifiers, and their value is equal, then return
+	   true.</p></li>
+
+	   <li><p>Otherwise, if either A or B or both are opaque identifiers, return
+	   false.</p></li>
+
+	   <li><p>If A and B have
+	   scheme components that are not identical, return false.</p></li>
+
+	   <li><p>If A and B have host
+	   components that are not identical, return false.</p></li>
+
+	   <li><p>If A and B have port
+	   components that are not identical, return false.</p></li>
+
+	   <li><p>If either A or B
+	   have additional data, but that data is not identical for both,
+	   return false.</p></li>
+
+	   <li><p>Return true.</p></li>
+
+	  </ol>
+  </blockquote>
+
+  <h3>Summary: You can't make a AJAX request to a different origin</h3>
+
+  <hr />
+
+  <h2>Workarounds</h2>
+
+	<h3><a href="http://json-p.org/">JSON with Padding (JSONP)</a></h3>
+	<a href="#" class="btn large primary">Run</a>
+	<pre id="jsonp" class="prettyprint linenums lang-js">function foo() {
+  console.log('JSONP:', this, arguments);  
+  window.self = this;
+  window.arguments = arguments;
+}
+
+var script = document.createElement('script');
+script.src = 'https://api.github.com/users/johnboxall?callback=foo';
+
+var jsonp = document.getElementsByTagName('script')[0];
+jsonp.parentNode.insertBefore(script, jsonp);
+</pre>
+
+	<h3><a href="http://www.w3.org/TR/cors/">Cross-Origin Resource Sharing (CORS)</a></h3>
+	<a href="#" class="btn large primary">Run</a>
+	<pre class="prettyprint linenums lang-js">var xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://api.github.com/users/johnboxall', true);
+xhr.onload = function() {
+  console.log('CORS:', this, arguments);  
+  window.self = this;
+  window.arguments = arguments;
+};
+xhr.send(null);</pre>
+
+	<h3><a href="https://github.com/mobifydemo/local-remote-api">Proxying</a></h3>
+	<a href="#" class="btn large primary">Run</a>
+	<pre class="prettyprint linenums lang-js">var xhr = new XMLHttpRequest();
+xhr.open('GET', '/api.github.com/users/johnboxall', true);
+xhr.onload = function() {
+  console.log('PROXY:', this, arguments);  
+  window.self = this;
+  window.arguments = arguments;
+
+};
+xhr.send(null);</pre>	
+
+
+
+
+<h1><a href="//twitter.com/johnboxall">@johnboxall</a></h1>
+<h2><a href="https://github.com/johnboxall/remote-api-js">remote-api-js @ github</a></h2>
+
+
+
+<script>
+document.addEventListener('click', function(e) {
+	var el = e.target;
+	if (/btn/.test(el.className)) {
+		window.eval.call(window, el.nextElementSibling.innerText);
+		e.preventDefault();
+	}
+}, false);
+</script>
+<script src="/_/prettify.js"></script>
+<script>prettyPrint()</script>
+
+
+</body>
+</html>
